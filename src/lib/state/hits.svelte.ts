@@ -53,7 +53,7 @@ export class HitsGame {
 		}
 	}
 
-	async submitGuess(trackId?: number, skip = false) {
+	async submitGuess(trackId?: number, skip = false, label?: string) {
 		if (this.status !== 'playing') return;
 		const attemptNumber = this.guesses.length + 1;
 
@@ -65,7 +65,8 @@ export class HitsGame {
 		if (!res.ok) return;
 		const data = (await res.json()) as GuessResponse;
 
-		this.guesses = [...this.guesses, { outcome: data.outcome, label: data.guessLabel }];
+		const entryLabel = skip ? 'Skipped' : (label ?? 'Unknown track');
+		this.guesses = [...this.guesses, { outcome: data.outcome, label: entryLabel }];
 		this.status = data.status;
 		if (data.track) {
 			this.revealedTrack = data.track;

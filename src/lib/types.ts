@@ -43,7 +43,6 @@ export interface GuessRequest {
 
 export interface GuessResponse {
 	outcome: GuessOutcome;
-	guessLabel: string;
 	guessesUsed: number;
 	maxGuesses: number;
 	status: GameStatus;

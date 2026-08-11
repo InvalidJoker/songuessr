@@ -58,7 +58,7 @@
 
 		{#if game.status === 'playing'}
 			<GuessInput
-				onguess={(id) => game.submitGuess(id)}
+				onguess={(id, label) => game.submitGuess(id, false, label)}
 				onskip={() => game.skip()}
 			/>
 		{/if}

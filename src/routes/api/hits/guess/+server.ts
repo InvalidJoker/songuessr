@@ -18,7 +18,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const response: GuessResponse = {
 		outcome,
-		guessLabel: outcome === 'skip' ? 'Skipped' : `${track.title} — ${track.artist}`,
 		guessesUsed: body.attemptNumber,
 		maxGuesses: MAX_GUESSES,
 		status,
