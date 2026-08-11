@@ -8,7 +8,7 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<div class="min-h-screen bg-neutral-950 text-white">
+<div class="min-h-screen bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
 	<NavBar />
 	<main class="mx-auto max-w-2xl px-4 py-8">
 		{@render children()}

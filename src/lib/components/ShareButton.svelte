@@ -20,7 +20,7 @@
 <button
 	type="button"
 	onclick={share}
-	class="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-emerald-400"
+	class="cursor-pointer rounded-xl bg-emerald-400 px-5 py-2.5 text-sm font-semibold text-neutral-900 transition hover:bg-emerald-500"
 >
 	{copied ? 'Copied!' : 'Share result'}
 </button>

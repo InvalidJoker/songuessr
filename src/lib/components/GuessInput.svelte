@@ -71,29 +71,33 @@
 				onfocus={() => (open = true)}
 				{disabled}
 				placeholder="Guess the song title or artist…"
-				class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/40 outline-none focus:border-emerald-400 disabled:opacity-40"
+				class="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-3 text-neutral-900 placeholder-neutral-400 outline-none focus:border-emerald-400 disabled:opacity-40 dark:border-white/10 dark:text-neutral-100 dark:placeholder-neutral-500"
 				autocomplete="off"
 			/>
 			{#if open && results.length > 0}
 				<ul
-					class="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-white/10 bg-neutral-900 shadow-xl"
+					class="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-white/10 dark:bg-neutral-900"
 				>
 					{#each results as r, i (r.id)}
 						<li>
 							<button
 								type="button"
 								onclick={() => pick(r)}
-								class="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-white/10 {i ===
+								class="flex w-full cursor-pointer items-center gap-3 px-3 py-2 text-left hover:bg-neutral-50 dark:hover:bg-white/5 {i ===
 								activeIndex
-									? 'bg-white/10'
+									? 'bg-emerald-50 dark:bg-emerald-400/10'
 									: ''}"
 							>
 								{#if r.cover}
 									<img src={r.cover} alt="" class="h-9 w-9 shrink-0 rounded" />
 								{/if}
 								<span class="min-w-0">
-									<span class="block truncate text-sm text-white">{r.title}</span>
-									<span class="block truncate text-xs text-white/50">{r.artist}</span>
+									<span class="block truncate text-sm text-neutral-900 dark:text-neutral-100"
+										>{r.title}</span
+									>
+									<span class="block truncate text-xs text-neutral-400 dark:text-neutral-500"
+										>{r.artist}</span
+									>
 								</span>
 							</button>
 						</li>
@@ -105,7 +109,7 @@
 			type="button"
 			onclick={onskip}
 			{disabled}
-			class="shrink-0 rounded-xl border border-white/15 px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10 disabled:opacity-40"
+			class="shrink-0 cursor-pointer rounded-xl border border-neutral-200 px-4 py-3 text-sm font-medium text-neutral-600 transition hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-neutral-300 dark:hover:bg-white/5"
 		>
 			Skip
 		</button>

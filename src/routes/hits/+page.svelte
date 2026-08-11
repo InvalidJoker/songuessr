@@ -24,13 +24,19 @@
 <div class="flex flex-col gap-6">
 	<div>
 		<h1 class="text-xl font-bold">Hits</h1>
-		<p class="text-sm text-white/50">Unlimited rounds — keep the streak going.</p>
+		<p class="text-sm text-neutral-400 dark:text-neutral-500">
+			Unlimited rounds — keep the streak going.
+		</p>
 	</div>
 
 	{#if game.loading}
-		<div class="flex h-40 items-center justify-center text-white/40">Loading…</div>
+		<div class="flex h-40 items-center justify-center text-neutral-400 dark:text-neutral-500">
+			Loading…
+		</div>
 	{:else if game.error}
-		<div class="rounded-xl border border-rose-400/30 bg-rose-500/10 p-4 text-rose-200">
+		<div
+			class="rounded-xl border border-rose-300 p-4 text-rose-600 dark:border-rose-400/30 dark:text-rose-400"
+		>
 			{game.error}
 		</div>
 	{:else}
@@ -61,7 +67,7 @@
 			<button
 				type="button"
 				onclick={() => game.nextRound()}
-				class="rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-black transition hover:bg-sky-400"
+				class="cursor-pointer rounded-xl bg-sky-400 px-5 py-3 text-sm font-semibold text-neutral-900 transition hover:bg-sky-500"
 			>
 				Next song →
 			</button>

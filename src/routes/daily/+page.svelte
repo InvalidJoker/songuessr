@@ -35,16 +35,20 @@
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-xl font-bold">Daily</h1>
-			<p class="text-sm text-white/50">
+			<p class="text-sm text-neutral-400 dark:text-neutral-500">
 				{game.dayNumber ? `Song #${game.dayNumber}` : 'Loading today’s song…'}
 			</p>
 		</div>
 	</div>
 
 	{#if game.loading}
-		<div class="flex h-40 items-center justify-center text-white/40">Loading…</div>
+		<div class="flex h-40 items-center justify-center text-neutral-400 dark:text-neutral-500">
+			Loading…
+		</div>
 	{:else if game.error}
-		<div class="rounded-xl border border-rose-400/30 bg-rose-500/10 p-4 text-rose-200">
+		<div
+			class="rounded-xl border border-rose-300 p-4 text-rose-600 dark:border-rose-400/30 dark:text-rose-400"
+		>
 			{game.error}
 		</div>
 	{:else}
@@ -74,7 +78,9 @@
 			/>
 			<div class="flex items-center justify-between">
 				<ShareButton text={shareText} />
-				<p class="text-sm text-white/40">Come back tomorrow for a new song.</p>
+				<p class="text-sm text-neutral-400 dark:text-neutral-500">
+					Come back tomorrow for a new song.
+				</p>
 			</div>
 		{/if}
 	{/if}
