@@ -25,6 +25,14 @@ interface DailyStats {
 const SAVE_PREFIX = 'songless:daily:';
 const STATS_KEY = 'songless:daily:stats';
 
+const DEFAULT_STATS: DailyStats = {
+	played: 0,
+	won: 0,
+	streak: 0,
+	maxStreak: 0,
+	lastCompletedDate: null
+};
+
 function statsKey() {
 	return STATS_KEY;
 }
@@ -44,18 +52,12 @@ export class DailyGame {
 	revealedTrack = $state<TrackMeta | null>(null);
 	loading = $state(true);
 	error = $state('');
-	stats = $state<DailyStats>({
-		played: 0,
-		won: 0,
-		streak: 0,
-		maxStreak: 0,
-		lastCompletedDate: null
-	});
+	stats = $state<DailyStats>(DEFAULT_STATS);
 
 	async init() {
 		this.loading = true;
 		this.error = '';
-		this.stats = readJSON(statsKey(), this.stats);
+		this.stats = readJSON(statsKey(), DEFAULT_STATS);
 
 		const date = todayKey();
 		const saved = readJSON<DailySave | null>(saveKeyFor(date), null);

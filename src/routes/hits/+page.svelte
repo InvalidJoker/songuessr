@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { HitsGame } from '$lib/state/hits.svelte';
 	import Player from '$lib/components/Player.svelte';
 	import GuessInput from '$lib/components/GuessInput.svelte';
@@ -7,7 +8,7 @@
 	import StatsBar from '$lib/components/StatsBar.svelte';
 
 	const game = new HitsGame();
-	$effect(() => {
+	onMount(() => {
 		game.nextRound();
 	});
 

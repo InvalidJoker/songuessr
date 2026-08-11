@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { DailyGame } from '$lib/state/daily.svelte';
 	import Player from '$lib/components/Player.svelte';
 	import GuessInput from '$lib/components/GuessInput.svelte';
@@ -9,7 +10,7 @@
 	import { buildShareText } from '$lib/game/share';
 
 	const game = new DailyGame();
-	$effect(() => {
+	onMount(() => {
 		game.init();
 	});
 

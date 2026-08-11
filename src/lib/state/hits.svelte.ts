@@ -10,6 +10,7 @@ interface HitsStats {
 
 const STATS_KEY = 'songless:hits:stats';
 const RECENT_LIMIT = 30;
+const DEFAULT_STATS: HitsStats = { played: 0, correct: 0, streak: 0, bestStreak: 0 };
 
 export class HitsGame {
 	roundId = $state('');
@@ -21,12 +22,12 @@ export class HitsGame {
 	revealedTrack = $state<TrackMeta | null>(null);
 	loading = $state(true);
 	error = $state('');
-	stats = $state<HitsStats>({ played: 0, correct: 0, streak: 0, bestStreak: 0 });
+	stats = $state<HitsStats>(DEFAULT_STATS);
 
 	private recentIds: number[] = [];
 
 	constructor() {
-		this.stats = readJSON(STATS_KEY, this.stats);
+		this.stats = readJSON(STATS_KEY, DEFAULT_STATS);
 	}
 
 	async nextRound() {
