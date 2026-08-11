@@ -1,0 +1,27 @@
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+import { resolveDailyRound } from '$lib/server/rounds';
+import { guessOutcome } from '$lib/server/matching';
+import { MAX_GUESSES } from '$lib/game/constants';
+import type { GuessRequest, GuessResponse } from '$lib/types';
+
+export const POST: RequestHandler = async ({ request }) => {
+	const body = (await request.json()) as GuessRequest;
+	const track = resolveDailyRound(body.roundId);
+	if (!track) return json({ error: 'invalid round' }, { status: 400 });
+
+	const outcome = guessOutcome(track, body.trackId, body.skip);
+
+	const status =
+		outcome === 'correct' ? 'won' : body.attemptNumber >= MAX_GUESSES ? 'lost' : 'playing';
+
+	const response: GuessResponse = {
+		outcome,
+		guessLabel: outcome === 'skip' ? 'Skipped' : `${track.title} — ${track.artist}`,
+		guessesUsed: body.attemptNumber,
+		maxGuesses: MAX_GUESSES,
+		status,
+		track: status !== 'playing' ? track : undefined
+	};
+	return json(response);
+};
