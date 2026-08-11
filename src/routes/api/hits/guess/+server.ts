@@ -4,8 +4,9 @@ import { resolveHitsRound, endHitsRound } from '$lib/server/rounds';
 import { guessOutcome } from '$lib/server/matching';
 import { MAX_GUESSES } from '$lib/game/constants';
 import type { GuessRequest, GuessResponse } from '$lib/types';
+import { recordHitsResult } from '$lib/server/db/stats';
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	const body = (await request.json()) as GuessRequest;
 	const track = resolveHitsRound(body.roundId);
 	if (!track) return json({ error: 'invalid or expired round' }, { status: 400 });
@@ -14,7 +15,10 @@ export const POST: RequestHandler = async ({ request }) => {
 	const status =
 		outcome === 'correct' ? 'won' : body.attemptNumber >= MAX_GUESSES ? 'lost' : 'playing';
 
-	if (status !== 'playing') endHitsRound(body.roundId);
+	if (status !== 'playing') {
+		endHitsRound(body.roundId);
+		if (locals.user) await recordHitsResult(locals.user.id, status === 'won');
+	}
 
 	const response: GuessResponse = {
 		outcome,
