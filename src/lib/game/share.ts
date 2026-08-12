@@ -19,13 +19,13 @@ export function buildShareText(opts: {
   const score = won ? `${guesses.length}/6` : 'X/6';
 
   const lines = [
-    `🎵 Soguessr Daily #${dayNumber}`,
+    `🎵 Songuessr Daily #${dayNumber}`,
     `${won ? '🎉' : '😵'} ${score}`,
     '',
     grid,
     '',
     `Can you beat my score? Play Songuessr Daily!`,
-    opts.url ?? 'https://soguessr.com'
+    opts.url ?? 'https://songuessr.com'
   ];
 
   return lines.join('\n');

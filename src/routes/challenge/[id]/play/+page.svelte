@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-	<title>Challenge — Songless</title>
+	<title>Challenge — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-6">

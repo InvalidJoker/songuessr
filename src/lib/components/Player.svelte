@@ -18,7 +18,7 @@
 	let audio: HTMLAudioElement;
 	let playing = $state(false);
 	let currentTime = $state(0);
-	let volume = $state(readJSON('songless:volume', 0.8));
+	let volume = $state(readJSON('songuessr:volume', 0.8));
 	let muted = $state(false);
 
 	$effect(() => {
@@ -62,7 +62,7 @@
 	function onVolumeInput(e: Event) {
 		volume = Number((e.currentTarget as HTMLInputElement).value);
 		muted = false;
-		writeJSON('songless:volume', volume);
+		writeJSON('songuessr:volume', volume);
 	}
 
 	function toggleMute() {

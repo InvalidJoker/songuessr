@@ -8,7 +8,7 @@ interface HitsStats {
 	bestStreak: number;
 }
 
-const STATS_KEY = 'songless:hits:stats';
+const STATS_KEY = 'songuessr:hits:stats';
 const RECENT_LIMIT = 30;
 const DEFAULT_STATS: HitsStats = { played: 0, correct: 0, streak: 0, bestStreak: 0 };
 

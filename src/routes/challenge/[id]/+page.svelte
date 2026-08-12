@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>Challenge — {data.challenge.playlistName} — Songless</title>
+	<title>Challenge — {data.challenge.playlistName} — Songuessr</title>
 </svelte:head>
 
 <div class="mx-auto flex max-w-sm flex-col gap-6 py-6 text-center">

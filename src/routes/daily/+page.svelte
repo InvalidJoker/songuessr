@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-	<title>Daily — Songless</title>
+	<title>Daily — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-6">

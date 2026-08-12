@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<title>Hits — Songless</title>
+	<title>Hits — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-6">

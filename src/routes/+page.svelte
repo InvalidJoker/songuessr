@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-	<title>Songless — guess the song</title>
+	<title>Songuessr — guess the song</title>
 </svelte:head>
 
 <section class="flex flex-col items-center gap-3 py-10 text-center">
@@ -25,7 +25,7 @@
 	>
 		♪
 	</span>
-	<h1 class="text-3xl font-bold tracking-tight">Songless</h1>
+	<h1 class="text-3xl font-bold tracking-tight">Songuessr</h1>
 	<p class="max-w-sm text-neutral-500 dark:text-neutral-400">
 		Listen to a short snippet and guess the song before you run out of tries. Each wrong guess
 		unlocks a little more of the track.

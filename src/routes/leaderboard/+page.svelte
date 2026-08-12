@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Leaderboard — Songless</title>
+	<title>Leaderboard — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-8">

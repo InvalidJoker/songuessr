@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>Profile — Songless</title>
+	<title>Profile — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-8">

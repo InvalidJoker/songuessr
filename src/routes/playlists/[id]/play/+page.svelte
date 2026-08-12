@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.playlist.name} — Songless</title>
+	<title>{data.playlist.name} — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-6">

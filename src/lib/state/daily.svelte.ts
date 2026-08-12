@@ -22,8 +22,8 @@ interface DailyStats {
 	lastCompletedDate: string | null;
 }
 
-const SAVE_PREFIX = 'songless:daily:';
-const STATS_KEY = 'songless:daily:stats';
+const SAVE_PREFIX = 'songuessr:daily:';
+const STATS_KEY = 'songuessr:daily:stats';
 
 const DEFAULT_STATS: DailyStats = {
 	played: 0,

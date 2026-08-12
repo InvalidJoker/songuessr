@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Sign in — Songless</title>
+	<title>Sign in — Songuessr</title>
 </svelte:head>
 
 <div class="mx-auto flex max-w-sm flex-col gap-6 py-6">

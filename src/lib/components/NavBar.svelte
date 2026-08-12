@@ -23,7 +23,7 @@
 			>
 				♪
 			</span>
-			<span class="hidden sm:inline">Songless</span>
+			<span class="hidden sm:inline">Songuessr</span>
 		</a>
 		<div class="flex min-w-0 items-center gap-2">
 			<nav class="flex gap-1 rounded-lg border border-neutral-200 p-1 dark:border-white/10">

@@ -79,7 +79,7 @@
 </script>
 
 <svelte:head>
-	<title>Playlists — Songless</title>
+	<title>Playlists — Songuessr</title>
 </svelte:head>
 
 <div class="flex flex-col gap-8">
