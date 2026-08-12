@@ -1,4 +1,4 @@
-import { pgTable, integer, text, timestamp, boolean, serial, jsonb, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, integer, bigint, text, timestamp, boolean, serial, jsonb, primaryKey } from 'drizzle-orm/pg-core';
 import { user } from './auth.schema';
 
 export const userStats = pgTable('user_stats', {
@@ -47,7 +47,7 @@ export const playlistTrack = pgTable('playlist_track', {
 		.notNull()
 		.references(() => playlist.id, { onDelete: 'cascade' }),
 	position: integer('position').notNull(),
-	deezerTrackId: integer('deezer_track_id').notNull(),
+	deezerTrackId: bigint('deezer_track_id', { mode: 'number' }).notNull(),
 	title: text('title').notNull(),
 	artist: text('artist').notNull(),
 	album: text('album').notNull().default(''),

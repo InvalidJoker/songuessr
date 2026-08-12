@@ -85,6 +85,7 @@ export async function runImport(
 			})
 			.where(eq(playlist.id, playlistId));
 	} catch (err) {
+		console.error(`Playlist import failed (${playlistId}):`, err);
 		await db
 			.update(playlist)
 			.set({
