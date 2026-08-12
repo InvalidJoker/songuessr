@@ -8,6 +8,8 @@
 
 	let creatingChallenge = $state(false);
 	let addingTrack = $state(false);
+	let retrying = $state(false);
+	let deleting = $state(false);
 	let pollHandle: ReturnType<typeof setInterval> | undefined;
 
 	$effect(() => {
@@ -46,6 +48,27 @@
 	async function removeTrack(trackId: number) {
 		await fetch(`/api/playlists/${data.playlist.id}/tracks/${trackId}`, { method: 'DELETE' });
 		await invalidateAll();
+	}
+
+	async function retryImport() {
+		retrying = true;
+		try {
+			await fetch(`/api/playlists/${data.playlist.id}/retry`, { method: 'POST' });
+			await invalidateAll();
+		} finally {
+			retrying = false;
+		}
+	}
+
+	async function deletePlaylist() {
+		if (!confirm(`Delete "${data.playlist.name}"? This can't be undone.`)) return;
+		deleting = true;
+		try {
+			const res = await fetch(`/api/playlists/${data.playlist.id}`, { method: 'DELETE' });
+			if (res.ok) await goto('/playlists');
+		} finally {
+			deleting = false;
+		}
 	}
 </script>
 
@@ -139,12 +162,36 @@
 			{/if}
 		</section>
 	{:else if data.playlist.importStatus === 'failed'}
-		<p class="text-sm text-neutral-400 dark:text-neutral-600">
-			Try importing again with a different link.
-		</p>
+		{#if data.isOwner}
+			<div class="flex gap-3">
+				<button
+					type="button"
+					onclick={retryImport}
+					disabled={retrying}
+					class="cursor-pointer rounded-xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-neutral-900 transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+				>
+					{retrying ? 'Retrying…' : 'Retry import'}
+				</button>
+			</div>
+		{:else}
+			<p class="text-sm text-neutral-400 dark:text-neutral-600">
+				Ask the owner to retry the import, or try a different link.
+			</p>
+		{/if}
 	{:else}
 		<p class="text-sm text-neutral-400 dark:text-neutral-600">
 			This can take a minute for bigger playlists or artists — this page updates automatically.
 		</p>
+	{/if}
+
+	{#if data.isOwner}
+		<button
+			type="button"
+			onclick={deletePlaylist}
+			disabled={deleting}
+			class="cursor-pointer self-start text-sm text-neutral-400 hover:text-rose-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-neutral-600"
+		>
+			{deleting ? 'Deleting…' : 'Delete playlist'}
+		</button>
 	{/if}
 </div>

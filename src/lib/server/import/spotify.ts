@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/private';
+import { ImportUserError } from './errors';
 
 export interface SourceTrack {
 	title: string;
@@ -25,7 +26,7 @@ export function isSpotifyConfigured(): boolean {
 async function getToken(): Promise<string> {
 	if (cachedToken && cachedToken.expiresAt > Date.now() + 5000) return cachedToken.value;
 	if (!isSpotifyConfigured()) {
-		throw new Error('Spotify is not configured (missing SPOTIFY_CLIENT_ID/SPOTIFY_CLIENT_SECRET)');
+		throw new ImportUserError('Spotify import is not configured on this server yet');
 	}
 
 	const basic = Buffer.from(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`).toString(

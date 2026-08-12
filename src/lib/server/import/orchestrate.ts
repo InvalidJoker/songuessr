@@ -4,7 +4,10 @@ import { eq } from 'drizzle-orm';
 import { fetchSpotifyPlaylist, fetchSpotifyArtistCatalog, type SourceTrack } from './spotify';
 import { fetchYouTubePlaylist } from './youtube';
 import { matchToDeezer } from './match';
+import { ImportUserError } from './errors';
 import type { PlaylistSourceType } from '$lib/server/db/schema';
+
+const GENERIC_IMPORT_ERROR = 'Something went wrong while importing this playlist.';
 
 const CONCURRENCY = 5;
 
@@ -46,14 +49,14 @@ export async function runImport(
 		}
 
 		if (tracks.length === 0) {
-			throw new Error('No tracks found at that URL');
+			throw new ImportUserError('No tracks found at that URL');
 		}
 
 		const results = await matchAll(tracks);
 		const matched = results.filter((r) => r.track !== null);
 
 		if (matched.length === 0) {
-			throw new Error("Couldn't match any of these tracks to playable songs");
+			throw new ImportUserError("Couldn't match any of these tracks to playable songs");
 		}
 
 		const rows = matched.map((r, i) => ({
@@ -86,13 +89,10 @@ export async function runImport(
 			.where(eq(playlist.id, playlistId));
 	} catch (err) {
 		console.error(`Playlist import failed (${playlistId}):`, err);
+		const importError = err instanceof ImportUserError ? err.message : GENERIC_IMPORT_ERROR;
 		await db
 			.update(playlist)
-			.set({
-				importStatus: 'failed',
-				importError: err instanceof Error ? err.message : 'Import failed',
-				updatedAt: new Date()
-			})
+			.set({ importStatus: 'failed', importError, updatedAt: new Date() })
 			.where(eq(playlist.id, playlistId));
 	}
 }

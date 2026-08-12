@@ -112,6 +112,17 @@ export async function getPlaylist(id: string) {
 	return row ?? null;
 }
 
+export async function deletePlaylist(id: string) {
+	await db.delete(playlist).where(eq(playlist.id, id));
+}
+
+export async function markPlaylistImporting(id: string) {
+	await db
+		.update(playlist)
+		.set({ importStatus: 'importing', importError: null, updatedAt: new Date() })
+		.where(eq(playlist.id, id));
+}
+
 export async function listPlaylists(limit = 50) {
 	return db
 		.select({

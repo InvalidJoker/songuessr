@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/private';
 import type { SourceTrack } from './spotify';
+import { ImportUserError } from './errors';
 
 const API_BASE = 'https://www.googleapis.com/youtube/v3';
 const MAX_PLAYLIST_TRACKS = 300;
@@ -54,7 +55,7 @@ export async function fetchYouTubePlaylist(
 	id: string
 ): Promise<{ name: string; cover: string | null; tracks: SourceTrack[] }> {
 	if (!isYouTubeConfigured()) {
-		throw new Error('YouTube is not configured (missing YOUTUBE_API_KEY)');
+		throw new ImportUserError('YouTube import is not configured on this server yet');
 	}
 
 	const playlistRes = await fetch(
@@ -65,7 +66,7 @@ export async function fetchYouTubePlaylist(
 		items: { snippet: { title: string; thumbnails?: { high?: { url: string } } } }[];
 	};
 	const meta = playlistJson.items[0];
-	if (!meta) throw new Error('Playlist not found or is private');
+	if (!meta) throw new ImportUserError('Playlist not found or is private');
 
 	const tracks: SourceTrack[] = [];
 	let pageToken = '';
