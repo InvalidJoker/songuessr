@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import TrackPicker from '$lib/components/TrackPicker.svelte';
+	import type { SearchResult } from '$lib/types';
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
 
 	let creatingChallenge = $state(false);
+	let addingTrack = $state(false);
 	let pollHandle: ReturnType<typeof setInterval> | undefined;
 
 	$effect(() => {
@@ -24,6 +27,25 @@
 		} catch {
 			creatingChallenge = false;
 		}
+	}
+
+	async function addTrack(track: SearchResult) {
+		addingTrack = true;
+		try {
+			await fetch(`/api/playlists/${data.playlist.id}/tracks`, {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ trackId: track.id })
+			});
+			await invalidateAll();
+		} finally {
+			addingTrack = false;
+		}
+	}
+
+	async function removeTrack(trackId: number) {
+		await fetch(`/api/playlists/${data.playlist.id}/tracks/${trackId}`, { method: 'DELETE' });
+		await invalidateAll();
 	}
 </script>
 
@@ -74,6 +96,31 @@
 				{creatingChallenge ? 'Creating…' : 'Challenge a friend'}
 			</button>
 		</div>
+
+		{#if data.isOwner && data.tracks}
+			<section class="flex flex-col gap-3">
+				<h2 class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Manage songs</h2>
+				<TrackPicker onpick={addTrack} disabled={addingTrack} />
+				<ul class="flex flex-col gap-1.5">
+					{#each data.tracks as t (t.id)}
+						<li class="flex items-center gap-3 rounded-lg border border-neutral-200 px-3 py-2 text-sm dark:border-white/10">
+							{#if t.cover}
+								<img src={t.cover} alt="" class="h-8 w-8 shrink-0 rounded" />
+							{/if}
+							<span class="min-w-0 flex-1 truncate">{t.title} — {t.artist}</span>
+							<button
+								type="button"
+								onclick={() => removeTrack(t.id)}
+								aria-label="Remove"
+								class="cursor-pointer text-neutral-400 hover:text-rose-500"
+							>
+								✕
+							</button>
+						</li>
+					{/each}
+				</ul>
+			</section>
+		{/if}
 
 		<section class="flex flex-col gap-3">
 			<h2 class="text-sm font-medium text-neutral-500 dark:text-neutral-400">Leaderboard — best streak</h2>

@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { and, desc, eq, notInArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, notInArray, sql } from 'drizzle-orm';
 import { db } from './index';
 import { playlist, playlistTrack, playlistStats, user, type PlaylistSourceType } from './schema';
+import type { TrackMeta } from '$lib/types';
 
 export async function createPlaylist(
 	ownerId: string,
@@ -19,6 +20,91 @@ export async function createPlaylist(
 		importStatus: 'importing'
 	});
 	return id;
+}
+
+export async function createManualPlaylist(ownerId: string, name: string, tracks: TrackMeta[]) {
+	const id = randomUUID();
+	await db.insert(playlist).values({
+		id,
+		ownerId,
+		name,
+		sourceType: 'manual',
+		cover: tracks[0]?.cover ?? null,
+		trackCount: tracks.length,
+		importStatus: 'ready'
+	});
+
+	await db.insert(playlistTrack).values(
+		tracks.map((t, i) => ({
+			playlistId: id,
+			position: i,
+			deezerTrackId: t.id,
+			title: t.title,
+			artist: t.artist,
+			album: t.album,
+			cover: t.cover,
+			coverBig: t.coverBig,
+			duration: t.duration,
+			explicit: t.explicit
+		}))
+	);
+
+	return id;
+}
+
+export async function getPlaylistTracks(playlistId: string) {
+	return db
+		.select()
+		.from(playlistTrack)
+		.where(eq(playlistTrack.playlistId, playlistId))
+		.orderBy(asc(playlistTrack.position));
+}
+
+export async function addTrackToPlaylist(playlistId: string, track: TrackMeta) {
+	const [{ count }] = await db
+		.select({ count: sql<number>`count(*)::int` })
+		.from(playlistTrack)
+		.where(eq(playlistTrack.playlistId, playlistId));
+
+	const [existing] = await db
+		.select({ id: playlistTrack.id })
+		.from(playlistTrack)
+		.where(and(eq(playlistTrack.playlistId, playlistId), eq(playlistTrack.deezerTrackId, track.id)));
+	if (existing) return;
+
+	await db.insert(playlistTrack).values({
+		playlistId,
+		position: count,
+		deezerTrackId: track.id,
+		title: track.title,
+		artist: track.artist,
+		album: track.album,
+		cover: track.cover,
+		coverBig: track.coverBig,
+		duration: track.duration,
+		explicit: track.explicit
+	});
+
+	await db
+		.update(playlist)
+		.set({ trackCount: count + 1, cover: sql`COALESCE(${playlist.cover}, ${track.cover})`, updatedAt: new Date() })
+		.where(eq(playlist.id, playlistId));
+}
+
+export async function removeTrackFromPlaylist(playlistId: string, playlistTrackId: number) {
+	await db
+		.delete(playlistTrack)
+		.where(and(eq(playlistTrack.id, playlistTrackId), eq(playlistTrack.playlistId, playlistId)));
+
+	const [{ count }] = await db
+		.select({ count: sql<number>`count(*)::int` })
+		.from(playlistTrack)
+		.where(eq(playlistTrack.playlistId, playlistId));
+
+	await db
+		.update(playlist)
+		.set({ trackCount: count, updatedAt: new Date() })
+		.where(eq(playlist.id, playlistId));
 }
 
 export async function getPlaylist(id: string) {
