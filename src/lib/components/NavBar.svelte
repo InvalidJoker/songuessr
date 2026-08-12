@@ -7,6 +7,7 @@
 	const links = [
 		{ href: '/daily', label: 'Daily' },
 		{ href: '/hits', label: 'Hits' },
+		{ href: '/playlists', label: 'Playlists' },
 		{ href: '/leaderboard', label: 'Leaderboard' }
 	];
 </script>
