@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 	const track = resolvePlaylistRound(body.roundId, params.id);
 	if (!track) return error(400, 'Invalid or expired round');
 
-	const outcome = guessOutcome(track, body.trackId, body.skip);
+	const outcome = await guessOutcome(track, body.trackId, body.skip);
 	const status =
 		outcome === 'correct' ? 'won' : body.attemptNumber >= MAX_GUESSES ? 'lost' : 'playing';
 

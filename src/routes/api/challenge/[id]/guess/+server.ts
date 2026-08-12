@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 	const track = await fetchTrackById(trackId);
 	if (!track) return error(500, 'Could not load this round');
 
-	const correct = !body.skip && isCorrectGuess(track, body.trackId);
+	const correct = !body.skip && (await isCorrectGuess(track, body.trackId));
 	const outcome = body.skip ? 'skip' : correct ? 'correct' : 'wrong';
 	const status =
 		outcome === 'correct' ? 'won' : body.attemptNumber >= MAX_GUESSES ? 'lost' : 'playing';
